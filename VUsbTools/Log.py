@@ -14,7 +14,6 @@
 from __future__ import division
 import sys, time, re, os, string
 import xml.sax
-import gtk, gobject
 import traceback, gzip, struct
 from VUsbTools import Types
 

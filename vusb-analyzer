@@ -10,7 +10,14 @@
 VERSION = "1.1"
 
 import sys, os, gtk
-from VUsbTools import Views, Log, Diff, Decode
+from VUsbTools import Views, Log, LogSource, Diff, Decode
+
+def attachView(viewContainer):
+    """Add decoding capabilities to a ViewContainer. """
+    from VUsbTools import Decoders
+    bus = Bus()
+    viewContainer.children.insert(0, bus)
+    bus.decoders.registerModules(Decoders)
 
 def main(filename, tailMode=False):
     ui = Views.MainWindow()
@@ -18,10 +25,10 @@ def main(filename, tailMode=False):
     ui.window.set_title("%s - VUsb Analyzer" % os.path.basename(filename))
 
     parser = Log.chooseParser(filename)
-    sink = Log.QueueSink(ui.handleEvent)
-    follower = Log.Follower(filename, parser(sink.eventQueue),
+    sink = LogSource.QueueSink(ui.handleEvent)
+    follower = LogSource.Follower(filename, parser(sink.eventQueue),
                             ui.status.progressQueue, tailMode)
-    Decode.attachView(ui)
+    attachView(ui)
 
     gtk.gdk.threads_init()
     follower.start()

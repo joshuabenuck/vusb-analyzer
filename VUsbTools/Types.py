@@ -24,39 +24,6 @@ except ImportError:
     psycoBind = lambda _: None
 
 
-class Color(psyobj):
-    """A simple color abstraction, supports linear interpolation.
-       We store individual rgba values, as well as a 32-bit packed
-       RGBA representation and an html/gdk-style string.
-       """
-    def __init__(self, r, g, b, a=0xFF):
-        self.r = r
-        self.g = g
-        self.b = b
-        self.a = a
-
-        self.gdkString = "#%02X%02X%02X" % (int(self.r + 0.5),
-                                            int(self.g + 0.5),
-                                            int(self.b + 0.5))
-
-        self.rgba = ((int(self.r + 0.5) << 24) |
-                     (int(self.g + 0.5) << 16) |
-                     (int(self.b + 0.5) << 8) |
-                     int(self.a + 0.5))
-
-    def lerp(self, a, other):
-        """For a=0, returns a copy of 'self'. For a=1, returns
-           a copy of 'other'. Other values return a new interpolated
-           color. Values are clamped to [0,1], so this will not
-           extrapolate new colors.
-           """
-        a = min(1, max(0, a))
-        b = 1.0 - a
-        return self.__class__(self.r * b + other.r * a,
-                              self.g * b + other.g * a,
-                              self.b * b + other.b * a)
-
-
 class Observable(psyobj):
     """A value with an associated set of listener functions that
        are notified on change.

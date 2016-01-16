@@ -396,9 +396,3 @@ class ControlDecoder:
         self.device.setInterface(setup.wIndex, setup.wValue)
 
 
-def attachView(viewContainer):
-    """Add decoding capabilities to a ViewContainer. """
-    from VUsbTools import Decoders
-    bus = Bus()
-    viewContainer.children.insert(0, bus)
-    bus.decoders.registerModules(Decoders)
